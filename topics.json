@@ -1,0 +1,54 @@
+{
+  "Antigravity 使い方": [
+    {"keyword": "Antigravityとは Google発AI IDE完全ガイド2026", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity インストールと初期設定", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity 基本操作ガイド", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity AIチャット機能の使い方", "priority": "medium", "status": "pending"},
+    {"keyword": "Antigravity ターミナル統合の活用法", "priority": "medium", "status": "pending"}
+  ],
+  "Antigravity 料金・プラン": [
+    {"keyword": "Antigravity 料金改定 クレジット制の全容", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity 無料で使える範囲", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity 有料プラン比較 2026", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity コスパ最大化テクニック", "priority": "medium", "status": "pending"}
+  ],
+  "Antigravity vs Cursor": [
+    {"keyword": "Antigravity vs Cursor 2026徹底比較", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity vs Windsurf どっちがいい", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity vs GitHub Copilot 機能比較", "priority": "medium", "status": "pending"},
+    {"keyword": "Antigravity vs Claude Code 使い分けガイド", "priority": "medium", "status": "pending"}
+  ],
+  "Antigravity 最新ニュース": [
+    {"keyword": "ユーザー抗議 Antigravity値上げ問題", "priority": "high", "status": "pending"},
+    {"keyword": "Manager Viewで5エージェント並列実行", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity 2026年最新アップデートまとめ", "priority": "high", "status": "pending"},
+    {"keyword": "Google I/O 2026 Antigravity発表内容", "priority": "medium", "status": "pending"},
+    {"keyword": "Antigravity ユーザー数 急成長の理由", "priority": "medium", "status": "pending"}
+  ],
+  "Antigravity エージェント機能": [
+    {"keyword": "Antigravity 自律エージェント機能の使い方", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity ブラウザ統合テスト自動化", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity Manager View 完全ガイド", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity エージェント プロンプト設計", "priority": "medium", "status": "pending"},
+    {"keyword": "Antigravity マルチエージェント開発フロー", "priority": "medium", "status": "pending"}
+  ],
+  "Antigravity 活用テクニック": [
+    {"keyword": "VS Codeからの移行ガイド Antigravity", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity マルチLLM設定テクニック", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity フルスタック開発ワークフロー", "priority": "medium", "status": "pending"},
+    {"keyword": "Antigravity リファクタリング自動化", "priority": "medium", "status": "pending"},
+    {"keyword": "Antigravity デバッグ効率化テクニック", "priority": "medium", "status": "pending"}
+  ],
+  "AI IDE比較": [
+    {"keyword": "AI IDE 5社比較2026 Antigravity Cursor Windsurf Copilot Claude Code", "priority": "high", "status": "pending"},
+    {"keyword": "AI IDE 選び方ガイド 2026年版", "priority": "high", "status": "pending"},
+    {"keyword": "フロントエンド開発に最適なAI IDE", "priority": "medium", "status": "pending"},
+    {"keyword": "バックエンド開発に最適なAI IDE", "priority": "medium", "status": "pending"}
+  ],
+  "Antigravity 設定・カスタマイズ": [
+    {"keyword": "Antigravity おすすめ設定・拡張機能", "priority": "high", "status": "pending"},
+    {"keyword": "Antigravity キーボードショートカット完全版", "priority": "medium", "status": "pending"},
+    {"keyword": "Antigravity テーマ・外観カスタマイズ", "priority": "medium", "status": "pending"},
+    {"keyword": "Antigravity Git連携 設定ガイド", "priority": "medium", "status": "pending"}
+  ]
+}
