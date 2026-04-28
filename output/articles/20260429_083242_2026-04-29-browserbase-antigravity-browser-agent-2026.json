@@ -1,0 +1,40 @@
+{
+  "title": "Antigravity (Browserbase) で実行するブラウザエージェント自動化2026",
+  "content": "# Antigravity (Browserbase) で実行するブラウザエージェント自動化2026\n\n## この記事でわかること\n- Browserbase 上の Antigravity を使ったクラウドブラウザエージェントの基本構成\n- 中級者がローカル Playwright から Browserbase へ移行する際の判断基準\n- セッション分離・永続化・Cookie 共有を活用した実用ワークフローの作り方\n\n## 結論\n2026年Q2時点の Browserbase Antigravity は「クラウド側で常駐するヘッドフルブラウザを、API/SDK 経由で AI エージェントから操作する」用途に最適化されたサービスです。中級開発者がスクレイピングや業務RPA を本番運用に乗せる際、ローカル Playwright の運用コストを大きく下げられるのが強みです。執筆時点では従量課金モデルなので、無料 API ベースで動く軽い処理を移すと逆にコスト増になる点だけは注意してください。\n\n## 本題\n\n### Antigravity と Browserbase の関係\n混乱しがちですが、執筆時点で「Antigravity」は2系統あります。\n\n- Google が出している AI IDE「Google Antigravity」\n- Browserbase が提供するブラウザ自動化向けランタイム名としての「Antigravity」\n\n本記事は後者、Browserbase 系の Antigravity を扱います。Browserbase は AWS や GCP のリージョンにヘッドレス/ヘッドフル Chrome を多数並べておき、SDK から「セッションを払い出して操作する」モデルを取っています。\n\n中級者向けに最初に覚えるべき構造は3層です。\n\n1. **エージェント層** (Claude / GPT / 自作 LLM ロジック)\n2. **制御プロトコル** (Playwright / Puppeteer / Selenium WebDriver の互換)\n3. **ランタイム層** (Browserbase が用意するクラウドブラウザセッション)\n\nエージェント層は変えずに、ローカル Playwright 接続先を Browserbase の WebSocket エンドポイントに差し替えるだけで動くケースが多いのが Browserbase の最大の強みです。\n\n### ローカル Playwright から移行すべき判断基準\nすべてを Browserbase に寄せる必要はありません。中級者の判断ポイントは次の4つ。\n\n- 並列度: 同時セッションが10を超えるならクラウド寄り\n- IP多様性: 同一IPでアクセスし続けると弾かれる業務（公開Webスクレイピング・予約系）はクラウド寄り\n- 永続化: 「ログイン状態を翌日まで持ち越したい」ならクラウド寄り\n- コスト: 数分の単発処理だけならローカルのほうが安い\n\n逆に「自社の社内ツールを夜間バッチで叩くだけ」「同じ1サイトに固定IPで張り付くほうが安全」といった用途はローカル運用の方が向きます。\n\n### 移行のコード例（Playwright）\nTypeScript のスニペット。`BROWSERBASE_API_KEY` と `BROWSERBASE_PROJECT_ID` だけで切替可能です。\n\n```ts\nimport { chromium } from \"playwright-core\";\n\nconst session = await fetch(\"https://api.browserbase.com/v1/sessions\", {\n  method: \"POST\",\n  headers: {\n    \"x-bb-api-key\": process.env.BROWSERBASE_API_KEY!,\n    \"Content-Type\": \"application/json\",\n  },\n  body: JSON.stringify({ projectId: process.env.BROWSERBASE_PROJECT_ID }),\n}).then((r) => r.json());\n\nconst browser = await chromium.connectOverCDP(session.connectUrl);\nconst ctx = browser.contexts()[0];\nconst page = await ctx.newPage();\nawait page.goto(\"https://example.com\");\nconsole.log(await page.title());\nawait browser.close();\n```\n\nポイントは `connectOverCDP` を使うこと。ローカル launch 系コードを残したままだと「ローカルで Chrome を立ち上げてしまう」ので、移行時は接続部だけ確実に書き換えます。\n\n### セッション永続化と Cookie 共有\nBrowserbase の便利機能のひとつが Persistent Context（執筆時点ではプロジェクト単位で有効化）です。これを使うとログイン状態をセッションをまたいで保持できるため、毎回ログインフローを通す必要がなくなります。\n\n中級者向けの典型ワークフロー:\n\n1. 初回: 手動 or プログラム経由でログイン → Cookie/LocalStorage が Browserbase 側に保存\n2. 2回目以降: 同じ context ID で接続 → ログイン済み状態で開始\n3. 期限切れ検知: 「ログインページへリダイレクトされた」を検出したら再ログインジョブをキック\n\nこれを LLM エージェントの Tool として包めば、「ログイン状態を維持したまま、人間が見ていないところで複数サイトを巡回する」エージェントが実装できます。\n\n### 観測性とデバッグ\n本番運用で詰まりがちなのが「失敗したセッションが何をしていたか分からない」問題です。Browserbase は各セッションの動画録画/HARログ/コンソールログをダッシュボード経由で確認できるため、エージェントが暴走した時の事後分析が大きく楽になります。\n\n中級者が必ず仕込んでおきたいログ設計:\n\n- セッションIDを必ずアプリ側ログに残す\n- ステップ単位でスクリーンショット / DOM スナップショット\n- アサーション失敗時に直前のページHTMLを保存\n\nこれだけで、原因不明な失敗の調査時間が体感で1/3〜1/5になります。\n\n## よくある質問（FAQ）\n\n### Q1: ローカル Playwright と比べて費用はどのくらい違いますか？\nA1: 執筆時点では Browserbase は分単位の従量課金です。1セッションが数十秒で終わる用途では割高になりがちで、逆に長時間ログイン状態を維持したり並列で大量セッションを回したりする用途ではローカルの運用コスト（OS更新・Chromeアップデート・IP管理）と比較して安くなる傾向があります。最終的な判断は実ワークロードでの試算が必要です。\n\n### Q2: Bot 対策の強いサイトには通用しますか？\nA2: 2026年Q2時点では、Cloudflare 系の高度な Bot 検知に対しては Browserbase でも普通に弾かれます。ステルス系オプションや Residential プロキシ統合は別途用意されていますが、ターゲットサイトの利用規約とのコンフリクトの方が事業リスクとして大きいので、規約と用途の確認が先です。\n\n### Q3: Anthropic の Computer Use と組み合わせられますか？\nA3: 組み合わせ自体は可能です。Computer Use 側はピクセル座標で操作する設計なので、Browserbase のヘッドフルセッションを VNC/動画ストリームとして取り出して読ませる構成になります。一方で素直に DOM 操作で済む用途なら、Playwright + LLM の構成のほうが安定するのが執筆時点の感覚です。\n\n## まとめ\nBrowserbase Antigravity は「ブラウザを動かしている時間」をクラウドに切り出すための便利なランタイムです。中級開発者は、ローカル Playwright のコードベースを温存したまま、判定基準（並列度・IP・永続化・コスト）に合うものから順次移行するのが現実的です。観測性まで含めて設計しておくと、エージェント運用の事後分析が圧倒的に楽になります。\n",
+  "meta_description": "Browserbase Antigravity を使ったクラウドブラウザエージェント自動化を中級者向けに解説。ローカル Playwright からの移行判断、セッション永続化、観測性まで実用観点でカバーします。",
+  "tags": [
+    "Antigravity",
+    "Browserbase",
+    "ブラウザ自動化",
+    "Playwright",
+    "クラウドエージェント"
+  ],
+  "slug": "2026-04-29-browserbase-antigravity-browser-agent-2026",
+  "faq": [
+    {
+      "question": "Q1: ローカル Playwright と比べて費用はどのくらい違いますか？",
+      "answer": "執筆時点では Browserbase は分単位の従量課金です。1セッションが数十秒で終わる用途では割高になりがちで、逆に長時間ログイン状態を維持したり並列で大量セッションを回したりする用途ではローカルの運用コスト（OS更新・Chromeアップデート・IP管理）と比較して安くなる傾向があります。最終的な判断は実ワークロードでの試算が必要です。"
+    },
+    {
+      "question": "Q2: Bot 対策の強いサイトには通用しますか？",
+      "answer": "2026年Q2時点では、Cloudflare 系の高度な Bot 検知に対しては Browserbase でも普通に弾かれます。ステルス系オプションや Residential プロキシ統合は別途用意されていますが、ターゲットサイトの利用規約とのコンフリクトの方が事業リスクとして大きいので、規約と用途の確認が先です。"
+    },
+    {
+      "question": "Q3: Anthropic の Computer Use と組み合わせられますか？",
+      "answer": "組み合わせ自体は可能です。Computer Use 側はピクセル座標で操作する設計なので、Browserbase のヘッドフルセッションを VNC/動画ストリームとして取り出して読ませる構成になります。一方で素直に DOM 操作で済む用途なら、Playwright + LLM の構成のほうが安定するのが執筆時点の感覚です。"
+    }
+  ],
+  "hero_emoji": "📝",
+  "hero_gradient": "135deg",
+  "keyword": "Antigravity",
+  "category": "Antigravity 実践",
+  "generated_at": "2026-04-29T08:32:42.892853",
+  "seo_score": 85,
+  "jsonld": [
+    "<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"BlogPosting\",\n  \"headline\": \"Antigravity (Browserbase) で実行するブラウザエージェント自動化2026\",\n  \"description\": \"Browserbase Antigravity を使ったクラウドブラウザエージェント自動化を中級者向けに解説。ローカル Playwright からの移行判断、セッション永続化、観測性まで実用観点でカバーします。\",\n  \"url\": \"https://musclelove-777.github.io/antigravity-guide/articles/2026-04-29-browserbase-antigravity-browser-agent-2026.html\",\n  \"datePublished\": \"2026-04-29T08:32:42.892853\",\n  \"dateModified\": \"2026-04-29T08:32:42.892853\",\n  \"author\": {\n    \"@type\": \"Organization\",\n    \"name\": \"wave37c-ai-articles-2\"\n  },\n  \"keywords\": \"Antigravity, Browserbase, ブラウザ自動化, Playwright, クラウドエージェント\",\n  \"articleSection\": \"Antigravity 実践\",\n  \"inLanguage\": \"ja\"\n}\n</script>",
+    "<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"FAQPage\",\n  \"mainEntity\": [\n    {\n      \"@type\": \"Question\",\n      \"name\": \"Q1: ローカル Playwright と比べて費用はどのくらい違いますか？\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"執筆時点では Browserbase は分単位の従量課金です。1セッションが数十秒で終わる用途では割高になりがちで、逆に長時間ログイン状態を維持したり並列で大量セッションを回したりする用途ではローカルの運用コスト（OS更新・Chromeアップデート・IP管理）と比較して安くなる傾向があります。最終的な判断は実ワークロードでの試算が必要です。\"\n      }\n    },\n    {\n      \"@type\": \"Question\",\n      \"name\": \"Q2: Bot 対策の強いサイトには通用しますか？\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"2026年Q2時点では、Cloudflare 系の高度な Bot 検知に対しては Browserbase でも普通に弾かれます。ステルス系オプションや Residential プロキシ統合は別途用意されていますが、ターゲットサイトの利用規約とのコンフリクトの方が事業リスクとして大きいので、規約と用途の確認が先です。\"\n      }\n    },\n    {\n      \"@type\": \"Question\",\n      \"name\": \"Q3: Anthropic の Computer Use と組み合わせられますか？\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"組み合わせ自体は可能です。Computer Use 側はピクセル座標で操作する設計なので、Browserbase のヘッドフルセッションを VNC/動画ストリームとして取り出して読ませる構成になります。一方で素直に DOM 操作で済む用途なら、Playwright + LLM の構成のほうが安定するのが執筆時点の感覚です。\"\n      }\n    }\n  ]\n}\n</script>",
+    "<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"BreadcrumbList\",\n  \"itemListElement\": [\n    {\n      \"@type\": \"ListItem\",\n      \"position\": 1,\n      \"name\": \"ホーム\",\n      \"item\": \"https://musclelove-777.github.io/antigravity-guide\"\n    },\n    {\n      \"@type\": \"ListItem\",\n      \"position\": 2,\n      \"name\": \"Antigravity 実践\",\n      \"item\": \"https://musclelove-777.github.io/antigravity-guide/category/Antigravity 実践\"\n    },\n    {\n      \"@type\": \"ListItem\",\n      \"position\": 3,\n      \"name\": \"Antigravity (Browserbase) で実行するブラウザエージェント自動化2026\"\n    }\n  ]\n}\n</script>"
+  ],
+  "has_affiliate": false,
+  "affiliate_count": 0
+}
