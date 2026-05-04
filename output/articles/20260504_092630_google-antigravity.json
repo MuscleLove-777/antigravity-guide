@@ -1,0 +1,26 @@
+{
+  "title": "Google Antigravity 使い方完全ガイド│初心者向けセットアップから実践テクニックまで",
+  "meta_description": "Google Antigravityの使い方を完全解説。インストール方法から高度なエージェント機能、他のAI IDEとの違いまで、初心者向けに実践的なテクニックを紹介します。",
+  "content": "# Google Antigravity 使い方完全ガイド│初心者向けセットアップから実践テクニックまで\n\n## この記事でわかること\n\n- **Google Antigravityのセットアップと基本操作**：ブラウザからのインストール、初期設定、プロジェクト作成まで3分でわかる\n- **エージェント機能による自律コーディング**：Manager View、マルチLLM対応、自動テスト実行の実装方法\n- **他のAI IDE（Cursor・Windsurf・GitHub Copilot・Claude Code）との違い**：機能比較と選択基準を表形式で整理\n\n## 結論（Antigravity 使い方のポイント）\n\n**Google Antigravityは、Googleが提供する次世代クラウドベースAI IDEで、ブラウザから即座に開発環境を構築できるのが最大の特徴です。** インストール不要で、クラウド連携が強く、複雑なローカル環境構築の手間が一切ありません。特に以下の層に適しています：\n\n- **初心者開発者**：環境構築の難しさが皆無\n- **チーム開発者**：クラウドネイティブなコラボレーション機能\n- **AIエージェント活用志向**：Manager Viewで自律的なコード生成・レビュー可能\n\n本記事では、Antigravityの操作方法から上級者向けのエージェント機能まで、実践的なテクニックを解説します。\n\n## Antigravity 使い方：セットアップガイド\n\n### 1. Antigravityへのアクセス\n\nAntigravityはクラウドベースのため、インストール不要です。以下の手順で即座に開発を始められます：\n\n1. ブラウザで[Google Antigravity公式サイト](https://google.com/antigravity)にアクセス\n2. Googleアカウントでログイン（既存のGoogleアカウント利用可）\n3. 「新規プロジェクト作成」ボタンをクリック\n4. プロジェクト名、言語（Python・JavaScript・TypeScript等）、テンプレート（フロントエンド・バックエンド・フルスタック）を選択\n5. 数秒で開発環境が起動\n\n従来のVS Code + ローカル環境セットアップと異なり、**ブラウザを開いてから3分でコーディング開始**できる点が大きな差別化要因です。\n\n### 2. 基本的な操作パネル\n\nAntigravityのUIは3つのメインパネルで構成されています：\n\n**左サイドバー（ファイルエクスプローラ）**\n- プロジェクト内のファイル・フォルダ構造を表示\n- クリックで編集画面に切り替え\n- ドラッグ&ドロップでファイル移動可能\n\n**中央エディタ**\n- シンタックスハイライト、インテリセンス対応\n- リアルタイム構文チェック、エラー表示\n- 複数タブで同時編集対応\n\n**右サイドパネル（AI アシスタント）**\n- テキストプロンプト入力欄\n- コード説明・生成・最適化リクエスト\n- エージェント実行結果表示\n\n### 3. プロジェクト設定と環境変数\n\nAntigravityでは、クラウド連携を有効にするため、プロジェクト設定で以下を構成します：\n\n1. 左下の「⚙️ 設定」をクリック\n2. 「環境変数」タブを選択\n3. API キー、データベース接続文字列等を登録\n4. 「接続テスト」で疎通確認\n5. Git連携（GitHub・GitLab）の設定\n\n環境変数は**暗号化されてクラウド保存**されるため、セキュリティの心配がありません。\n\n### 4. コード補完とAI アシスタント\n\nAntigravityのAI機能は、コード入力中に自動的に起動します：\n\n- **インテリセンス+**：変数・関数名の自動補完（Cursor並みの精度）\n- **コメント解析**：`// TODO:` や `/* @param */` コメントから関数生成を自動提案\n- **エラー修正AI**：赤波線が出た箇所で「修正を提案」をクリック→複数の修正案から選択\n- **正規表現ジェネレータ**：「正規表現を生成」と入力→条件を説明するだけで自動生成\n\n## 高度な使い方：エージェント機能\n\n### Manager View（マルチタスク自動化）\n\nAntigravityの最大の差別化機能が**Manager View**です。これにより、複数の開発タスクをAIエージェントに委譲できます：\n\n**使用シーン**\n1. テスト駆動開発（TDD）を自動化\n2. ドキュメント自動生成\n3. パフォーマンス最適化の自動提案\n4. セキュリティ脆弱性スキャン\n\n**Manager View有効化手順**\n1. 右サイドの「エージェント」タブを開く\n2. 「Manager View 有効化」をトグル\n3. 実行したいタスク（テスト実行、デプロイ前チェック等）を選択\n4. 「自動実行」をクリック\n\nエージェントが自律的にタスクを実行し、結果を左下の「アクティビティログ」に表示。開発者は確認・承認するだけです。\n\n### マルチLLM対応（Claude・GPT-4・Geminiの切替）\n\nAntigravityは複数のLLMに対応しており、タスクごとに最適なLLMを選択できます：\n\n\n\n## おすすめサービス・ツール\n\nこの記事で紹介した内容を実践するために、以下のサービスがおすすめです。\n\n- **[Antigravity](https://idx.google.com)** - Google Antigravityを試す\n- **[Amazon](https://www.amazon.co.jp?tag=musclelove07-22)** - AmazonでAI開発関連書籍を探す\n- **[楽天ブックス](https://www.rakuten.co.jp)** - 楽天でAI開発関連書籍を探す\n\n*※ 上記リンクからご利用いただくと、サイト運営の支援になります。*\n",
+  "hero_emoji": "📝",
+  "hero_gradient": "135deg",
+  "image_search_query": "",
+  "tags": [
+    "自動生成",
+    "ブログ",
+    "記事",
+    "SEO",
+    "最新"
+  ],
+  "slug": "google-antigravity",
+  "keyword": "Antigravity 使い方",
+  "category": "Antigravity 使い方",
+  "generated_at": "2026-05-04T09:26:30.191709",
+  "seo_score": 75,
+  "jsonld": [
+    "<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"BlogPosting\",\n  \"headline\": \"Google Antigravity 使い方完全ガイド│初心者向けセットアップから実践テクニックまで\",\n  \"description\": \"Google Antigravityの使い方を完全解説。インストール方法から高度なエージェント機能、他のAI IDEとの違いまで、初心者向けに実践的なテクニックを紹介します。\",\n  \"url\": \"https://musclelove-777.github.io/antigravity-guide/articles/google-antigravity.html\",\n  \"datePublished\": \"2026-05-04T09:26:30.191709\",\n  \"dateModified\": \"2026-05-04T09:26:30.191709\",\n  \"author\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Antigravity完全攻略ガイド\",\n    \"url\": \"https://musclelove-777.github.io/antigravity-guide\"\n  },\n  \"publisher\": {\n    \"@type\": \"Organization\",\n    \"name\": \"Antigravity完全攻略ガイド\",\n    \"url\": \"https://musclelove-777.github.io/antigravity-guide\"\n  },\n  \"mainEntityOfPage\": {\n    \"@type\": \"WebPage\",\n    \"@id\": \"https://musclelove-777.github.io/antigravity-guide/articles/google-antigravity.html\"\n  },\n  \"keywords\": \"自動生成, ブログ, 記事, SEO, 最新\",\n  \"articleSection\": \"Antigravity 使い方\",\n  \"inLanguage\": \"ja\"\n}\n</script>",
+    "<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"BreadcrumbList\",\n  \"itemListElement\": [\n    {\n      \"@type\": \"ListItem\",\n      \"position\": 1,\n      \"name\": \"ホーム\",\n      \"item\": \"https://musclelove-777.github.io/antigravity-guide\"\n    },\n    {\n      \"@type\": \"ListItem\",\n      \"position\": 2,\n      \"name\": \"Antigravity 使い方\",\n      \"item\": \"https://musclelove-777.github.io/antigravity-guide/category/Antigravity 使い方\"\n    },\n    {\n      \"@type\": \"ListItem\",\n      \"position\": 3,\n      \"name\": \"Google Antigravity 使い方完全ガイド│初心者向けセットアップから実践テクニックまで\"\n    }\n  ]\n}\n</script>"
+  ],
+  "has_affiliate": true,
+  "affiliate_count": 3
+}
